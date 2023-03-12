@@ -4,7 +4,7 @@ import Comment from '../Comments';
 import styles from './styles.module.css'
 
 import dayjs from '../../utils/dayjsUtil';
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react';
 
 
 interface Author {
@@ -14,29 +14,34 @@ interface Author {
 }
 
 interface Content {
-    type: string,
+    type: 'paragraph' | 'link',
     content: string,
 }
 
-interface PostProps {
+export interface PostType {
+    id: number,
     author: Author,
-    content: Content[],
     publishedAt: Date
+    content: Content[],
 }
 
-const Post: React.FC<PostProps> = ({author, content, publishedAt}) => {
+interface PostProps {
+    post: PostType
+}
+
+const Post: React.FC<PostProps> = ({ post }: PostProps) => {
 
     const [comments, setComments] = useState([
        'Belo projeto man!! 👏👏'
     ]);
 
-    const [newCommentText, setNewCommentText] = useState('')
-;
-    const publishedDateFormated = dayjs(publishedAt).format("DD [de] MMMM [às] HH[:]mm[h]");
+    const [newCommentText, setNewCommentText] = useState('');
 
-    const publishedDateRelativeToNow = dayjs(publishedAt).fromNow()
+    const publishedDateFormated = dayjs(post.publishedAt).format("DD [de] MMMM [às] HH[:]mm[h]");
 
-    function handleCreateNewComment() {
+    const publishedDateRelativeToNow = dayjs(post.publishedAt).fromNow()
+
+    function handleCreateNewComment(event: FormEvent) {
         event.preventDefault();
 
         setComments([...comments, newCommentText]);
@@ -44,38 +49,45 @@ const Post: React.FC<PostProps> = ({author, content, publishedAt}) => {
         setNewCommentText('');
     }
 
-    function handleNewCommentChange(){
+    function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>){
+        event?.target.setCustomValidity('')
         setNewCommentText(event?.target.value)
     }
 
-    function deleteComment(commentToDelete){
-
+    function deleteComment(commentToDelete: string){
         const commentsWithoutDeleteOne = comments.filter(comment => {
             return comment !== commentToDelete
         })
 
         setComments(commentsWithoutDeleteOne);
-        
     }
+
+    function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
+        event?.target.setCustomValidity('Esse comentário é obrigatório!')
+        setNewCommentText(event?.target.value)
+    }
+
+    const isNewCommentEmpty = newCommentText.length === 0
+
 
     return (
         <article className={styles.post}>
             <header>
                 <div className={styles.author}>
-                <Avatar src={author.avatarUrl} />
+                <Avatar src={post.author.avatarUrl} />
                     <div className={styles.authorInfo}>
-                        <strong>{author.name}</strong>
-                        <span>{author.role}</span>
+                        <strong>{post.author.name}</strong>
+                        <span>{post.author.role}</span>
                     </div>
                 </div>
-                    <time title={publishedDateFormated} dateTime={publishedAt.toISOString()}>Públicado {publishedDateRelativeToNow}</time>
+                    <time title={publishedDateFormated} dateTime={post.publishedAt.toISOString()}>Públicado {publishedDateRelativeToNow}</time>
             </header>
             <div className={styles.content}>
-                {content.map(item => {
+                {post.content.map(item => {
                     if (item.type === 'paragraph') {
-                    return <p>{item.content}</p>
+                    return <p key={item.content}>{item.content}</p>
                     } else if (item.type === 'link') {
-                        return <p><a href=''>{item.content}</a></p>
+                        return <p key={item.content}><a href=''>{item.content}</a></p>
                     }
                 })}
             </div>
@@ -83,9 +95,16 @@ const Post: React.FC<PostProps> = ({author, content, publishedAt}) => {
             <form onSubmit={handleCreateNewComment} className={styles.comentForm}>
                 <strong>Deixe seu comentário</strong>
 
-                <textarea value={newCommentText} onChange={handleNewCommentChange} name='comment' placeholder='Deixe um comentário...' />
+                <textarea 
+                    name='comment'
+                    value={newCommentText}
+                    onChange={handleNewCommentChange}
+                    onInvalid={handleNewCommentInvalid}
+                    placeholder='Deixe um comentário...' 
+                    required
+                />
                 <footer>
-                    <button type='submit'>Publicar</button>
+                    <button type='submit' disabled={isNewCommentEmpty}>Publicar</button>
                 </footer>
             </form>
 

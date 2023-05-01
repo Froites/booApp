@@ -1,4 +1,4 @@
-# Boo App - Forum
+# Boo App - Igite Feed
 
 ![image](https://user-images.githubusercontent.com/15222245/235392352-b2a800a7-4e8f-4c4a-8634-3f56b8ef2426.png)
 

@@ -1,5 +1,8 @@
 # Boo App - Forum
 
+![image](https://user-images.githubusercontent.com/15222245/235392352-b2a800a7-4e8f-4c4a-8634-3f56b8ef2426.png)
+
+
 Esse projeto foi criado para aprimorar os conhecimentos em React, seguindo o curso Ignite da Rocketseat.
 As principais caracteristicas técnicas é que ele utiliza React v18.2.0, TypeScript v4.9.3 dayjs v1.11.7 e
 phosphor-react v1.4.1

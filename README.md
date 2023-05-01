@@ -7,6 +7,12 @@ Esse projeto foi criado para aprimorar os conhecimentos em React, seguindo o cur
 As principais caracteristicas técnicas é que ele utiliza React v18.2.0, TypeScript v4.9.3 dayjs v1.11.7 e
 phosphor-react v1.4.1
 
+### Principais funcionalidades
+
+Aplicação tem a opção de adcionar um comentário ao post que inicialmente é fixo(mas se aprimorado podemos criar outros) e excluir o comentário que não quiser. Utilizando a lib dayjs foi adicionado o publishedAt dos posts e comentários. Para a estilização foi utilizado o module.css assim foram criados arquivos css para pada componente da aplicação. 
+Utilizei o react hooks UseState, para o gerenciamento de estado dos componentes e também usei manipuladores de eventos do react.
+Busquei utilizar o Typescript da forma correta e funcional, criando interfaces e passando props entre componentes
+
 ### 📋 Pré-requisitos
 
 Você precisará do  'React v18.2.0' ou versões compativeis
